@@ -1,3 +1,9 @@
+---
+layout: default
+title: "ThomeLuaPro 更新日志"
+description: "ThomeLuaPro 项目的详细更新日志"
+---
+
 # ThomeLuaPro 开发人员名单
 *(开发人员的名称的先后顺序与贡献度无关)*
 
