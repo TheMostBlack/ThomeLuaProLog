@@ -1,9 +1,3 @@
----
-layout: default
-title: "ThomeLuaPro 更新日志"
-description: "ThomeLuaPro的详细更新日志"
----
-
 # ThomeLuaPro 开发人员名单
 *(开发人员的名称的先后顺序与贡献度无关)*
 
@@ -199,7 +193,6 @@ end
 
 **manifest.yml 的格式如下**:
 ```yaml
-manifest.yml:
 appname : "MyApplication"
 packagename : "com.ThomeLuaPro.MyApplication"
 theme : "@com.google.android.material:style/Theme.Material3.DynamicColors.DayNight.NoActionBar"
@@ -268,6 +261,98 @@ user_permission :
   CheckSyntax.checkSyntax(luaPath, true)
   ```
 
-- **IDE 后续会支持编写 Java/C，目前 C 的编写功能开发会很快开始进行，目前已经做到了只需要 30MB 就可以获得一个完整的 ndk**
+---
+
+### 1.0.0 Beta6
+- **支持创建 C 工程并编译，打包成一个简单的可执行文件的运行 Apk（Alpha）**
+- **关于 C 编译，我们做到了只需要 30MB 就可以获得一个完整的 NDK**
+- **我们有一个自己的构建配置文件 `ThomeLists.yml` ：**
+  ```yaml
+  ModuleName : "MyApplication"
+  FileLists :
+    - main.c
+  ```
+
+  - **ModuleName** 是模块名称
+  - **FileLists** 是文件列表（从工程的根目录开始）
+
+  例如你的工程文件树是这样的:
+  ```
+  /sdcard/ThomeLua/project/MyApplication/
+  ├── ThomeLists.yml
+  ├── main.c
+  └── test/
+      └── test.c
+  ```
+
+  如果你想编译 `main.c` 和 `test.c`，则需要这样写:
+  ```yaml
+  ModuleName : "MyApplication"
+  FileLists :
+    - main.c
+    - test/test.c
+  ```
+
+- **修复 Android 10 以下设备进入 ThomeLuaPro 时会报错的问题**
+- **优化报错提示，使用 WebSocketServer，防止卡主进程**
+- **SoraEditor 模式中，新增 Table 结构显示:**
+  ```lua
+  local a = {
+    b = 1
+  }
+
+  print(a.b)
+  ```
+  将光标放到 `a.b` 的 `a` 上，会显示:
+  ```
+  table : a
+  b : 1
+  ```
+
+- **新增 Aly 布局使用未知属性时发出警告的功能:**
+  ```lua
+  {
+    LinearLayout,
+    orientation = "vertical",
+    layout_width = "fill",
+    layout_height = "fill",
+    gravity = "cente",  -- 错误的属性值
+    {
+      TextView,
+      text = "Hello ThomeLuaPro",
+    },
+  }
+  ```
+  例如，将 `gravity` 设置为 `cente`（正确的应该是 `center`），则会警告“可能出现拼写错误”
+
+- **将格式化功能添加到符号栏中，位置在第一个，显示为“F”**
+- **支持自动补全:**
+  ```lua
+  print(""
+  ```
+  会提示缺少 `")"`，并在下方显示一个补全按钮，点击后可以自动补全，例如 `end` 或双引号
+
+- **新增快捷表达式功能:**
+  ```lua
+  --reg fast_exp = function abc() end
+
+  --fast_exp
+  ```
+  将光标移动至 `--fast_exp`，会有一个“使用快捷表达式”的按钮，点击后会将 `--fast_exp` 变成 `function abc() end`
+
+  当然，快捷表达式支持多行:
+  ```lua
+  --[[
+  reg fast_exp =
+  function abc()
+  end
+  ]]
+  
+  --fast_exp
+  ```
+
+  将光标移动至快捷表达式上也会展示快捷表达式的结构
+
+- **将 ThomeLuaPro 预览版分支的 Java API 浏览器功能添加到主分支中**
 
 ---
